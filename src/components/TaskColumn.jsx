@@ -17,7 +17,7 @@ const TaskColumn = ({ colId }) => {
   return (
     <div
       ref={setNodeRef}
-      className="bg-gray-100 p-4 rounded min-w-72 w-80 flex-shrink-0 relative h-[36rem]"
+      className="bg-blue-50 p-4 rounded min-w-72 w-96 flex-shrink-0 relative h-[36rem]"
     >
       <img
         src="./cross.svg"
@@ -25,7 +25,7 @@ const TaskColumn = ({ colId }) => {
         onClick={() => {
           deleteColumn(col?.id);
         }}
-        className="absolute -right-4 -top-4 size-8 cursor-pointer"
+        className="absolute -right-3 -top-3 size-6 cursor-pointer"
       />
 
       <div className="font-bold mb-3 text-center">{col?.title}</div>

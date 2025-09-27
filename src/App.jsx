@@ -10,9 +10,9 @@ function App() {
   //   return <div>loading....</div>;
   // }
   return (
-    <div className=" border border-blue-300 p-8 m-auto rounded-2xl w-6xl min-h-[40rem]">
+    <div className=" border border-blue-300 p-8 m-auto rounded-2xl w-7xl min-h-[40rem]">
       <div className="flex justify-end px-4">
-        <button className="items-end" onClick={() => setForm(true)}>
+        <button className="text-white" onClick={() => setForm(true)}>
           Add New column
         </button>
       </div>
