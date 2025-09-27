@@ -1,71 +1,127 @@
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { db } from '../firebase';
+import { onValue, update, remove, ref } from 'firebase/database';
 import { v4 as uuidv4 } from 'uuid';
-const TaskboardContext = createContext();
 
-export const useTaskBoard = () => useContext(TaskboardContext);
+const TaskBoardContext = createContext();
+export const useTaskBoard = () => useContext(TaskBoardContext);
+export const TaskBoardProvider = ({ children }) => {
+  const [cols, setCols] = useState({});
+  const [tasks, setTasks] = useState({});
+  const [loading, setLoading] = useState({});
 
-const TaskBoardProvider = ({ children }) => {
-  const colsData = {
-    col1: {
-      id: 'col1',
-      title: 'To do',
-      taskIds: ['t1'],
-    },
-    col2: {
-      id: 'col2',
-      title: 'In progress',
-      taskIds: ['t2'],
-    },
-    col3: {
-      id: 'col3',
-      title: 'Done',
-      taskIds: ['t3'],
-    },
-  };
-  const taskData = {
-    t1: {
-      id: 't1',
-      title: 'fsdwdwd',
-      description: 'dfdfdfdfdfdfdfdfdfdf dfdfdfd dfdfdfd',
-    },
-    t2: {
-      id: 't2',
-      title: 'fsdwdwd',
-      description: 'dfdfdfdfdfdfdfdfdfdf dfdfdfd dfdfdfd ',
-    },
-  };
-  const [tasks, setTasks] = useState(taskData);
-  const [cols, setCols] = useState(colsData);
-  console.log(cols);
-  const addCol = (title) => {
+  const [columnOrder, setColumnOrder] = useState([]);
+  useEffect(() => {
+    setLoading(true);
+    const board1Ref = ref(db, `boards/board1`);
+    onValue(board1Ref, (snap) => {
+      const data = snap.val();
+      if (data) {
+        setCols(data?.columns || {});
+        setColumnOrder(data?.columnOrder || []);
+        setLoading(false);
+      }
+    });
+    const taksRef = ref(db, 'tasks');
+    onValue(taksRef, (snap) => setTasks(snap.val() || {}));
+    setLoading(false);
+  }, []);
+  const addColumn = (title) => {
     const id = uuidv4();
-    setCols((pre) => ({
-      ...pre,
-      [id]: { id, title: title, taskIds: [] },
-    }));
+    update(ref(db), {
+      [`boards/board1/columns/${id}`]: { id, title, taskIds: [] },
+      [`boards/board1/columnOrder`]: [...columnOrder, id],
+    });
   };
-  const addTask = (colId, title) => {
+  const deleteColumn = (id) => {
+    update(ref(db), {
+      [`boards/board1/columnOrder`]: columnOrder.filter((ele) => ele !== id),
+    });
+    remove(ref(db, `boards/board1/columns/${id}`));
+  };
+  const updateColumn = (id, title) => {
+    update(ref(db, `boards/board1/columns/${id}`), { title });
+  };
+
+  const dragTask = (fromColId, toColId, taskId, toInd) => {
+    const fromIds = Array.from(cols[fromColId]?.taskIds || []);
+    const toIds = Array.from(cols[toColId]?.taskIds || []);
+    const filteredFrom = fromIds.filter((id) => id !== taskId);
+    if (fromColId === toColId) {
+      filteredFrom.splice(toInd, 0, taskId);
+      const updates = {};
+      updates[`boards/board1/columns/${fromColId}/taskIds`] = filteredFrom;
+      update(ref(db), updates);
+      return;
+    }
+    const newTo = Array.from(toIds);
+    const already = newTo.includes(taskId);
+    if (!already) {
+      newTo.splice(toInd, 0, taskId);
+    } else {
+      const tmp = newTo.filter((id) => id !== taskId);
+      tmp.splice(toInd, 0, taskId);
+      for (let i = 0; i < 1; i++) newTo.pop();
+      newTo.length = tmp.length;
+      newTo.splice(0, newTo.length, ...tmp);
+    }
+    const updates = {};
+    updates[`boards/board1/columns/${fromColId}/taskIds`] = filteredFrom;
+    updates[`boards/board1/columns/${toColId}/taskIds`] = newTo;
+    update(ref(db), updates);
+  };
+  const addTask = (colId, title, description) => {
+    const id = uuidv4();
+    const task = {
+      id,
+      title,
+      description,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const taaskId = cols[colId]?.taskIds || [];
+    console.log(taaskId)
+    const updates = {};
+    updates[`tasks/${id}`] = task;
+    updates[`boards/board1/columns/${colId}/taskIds`] = [...taaskId, id];
+    update(ref(db), updates);
+  };
+  const updateTask = (id, title, description) => {
+    update(ref(db, `tasks/${id}`), {
+      title,
+      description,
+      updatedAt: new Date().toISOString(),
+    });
+  };
+  const deleteTask = (colId, taskId) => {
     console.log(colId);
-    console.log(title);
-    const id = uuidv4();
-    setTasks((pre) => ({
-      ...pre,
-      [id]: { id, title: title },
-    }));
-    setCols((pre) => ({
-      ...pre,
-      [colId]: {
-        ...pre[colId],
-        taskIds: [...pre[colId].taskIds, id],
-      },
-    }));
+    console.log(taskId);
+    const filtered = (cols[colId]?.taskIds || [])?.filter(
+      (ele) => ele !== taskId
+    );
+    const updates = {};
+    updates[`boards/board1/columns/${colId}/taskIds`] = filtered;
+    updates[`tasks/${taskId}`] = null;
+    update(ref(db), updates);
   };
+
   return (
-    <TaskboardContext.Provider
-      value={{ cols, tasks, addCol, addTask, setTasks, setCols }}
+    <TaskBoardContext.Provider
+      value={{
+        cols,
+        columnOrder,
+        tasks,
+        addColumn,
+        updateColumn,
+        deleteColumn,
+        addTask,
+        updateTask,
+        deleteTask,
+        dragTask,
+        loading,
+      }}
     >
       {children}
-    </TaskboardContext.Provider>
+    </TaskBoardContext.Provider>
   );
 };
-export default TaskBoardProvider;

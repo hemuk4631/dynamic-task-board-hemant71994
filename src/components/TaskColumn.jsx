@@ -1,0 +1,97 @@
+import React, { useState } from 'react';
+import { useTaskBoard } from '../context/TaskBoardProvider';
+import TaksCard from './TaksCard';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { useDroppable } from '@dnd-kit/core';
+import Sortable from './Sortable';
+const TaskColumn = ({ colId }) => {
+  const { cols, addTask, deleteColumn } = useTaskBoard();
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [newForm, setNewFrom] = useState(false);
+  const { setNodeRef } = useDroppable({ id: `col-${colId}` });
+  const col = cols[colId];
+  return (
+    <div
+      ref={setNodeRef}
+      className="bg-gray-100 p-4 rounded min-w-72 w-80 flex-shrink-0 relative h-[36rem]"
+    >
+      <img
+        src="./cross.svg"
+        alt="del"
+        onClick={() => {
+          deleteColumn(col?.id);
+        }}
+        className="absolute -right-4 -top-4 size-8 cursor-pointer"
+      />
+
+      <div className="font-bold mb-3 text-center">{col?.title}</div>
+
+      <SortableContext
+        items={col?.taskIds || []}
+        strategy={verticalListSortingStrategy}
+      >
+        <div className="flex flex-col gap-2">
+          {col?.taskIds?.map((taskId) => (
+            <Sortable key={taskId} id={taskId}>
+              <TaksCard taskId={taskId} colId={colId} />
+            </Sortable>
+          ))}
+        </div>
+      </SortableContext>
+      {!newForm && (
+        <div
+          onClick={() => setNewFrom(true)}
+          className="flex justify-end mt-3 p-2 bg-gray-200 w-fit text-sm"
+        >
+          + Add New
+        </div>
+      )}
+      {newForm && (
+        <div className="mt-3">
+          <input
+            placeholder="New task title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-2 h-8 rounded border outline-none mb-2"
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            className="p-2 border rounded w-full outline-none text-sm"
+          />
+          <div className="flex gap-4">
+            <button
+              onClick={() => {
+                if (!(title || desc)) return;
+                addTask(colId, title, desc);
+                setTitle('');
+                setDesc('');
+                setNewFrom(false);
+              }}
+              className="mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full"
+            >
+              Add
+            </button>
+            <button
+              onClick={() => {
+                setNewFrom(false);
+                setDesc('');
+                setTitle('');
+              }}
+              className="mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+export default TaskColumn;
