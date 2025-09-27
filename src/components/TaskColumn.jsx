@@ -16,17 +16,20 @@ const TaskColumn = ({ colId }) => {
   const col = cols[colId];
   return (
     <div className="relative">
-      <img
-        src="./cross.svg"
-        alt="del"
-        onClick={() => {
-          deleteColumn(col?.id);
-        }}
-        className="absolute -right-3 -top-3 size-6 cursor-pointer"
-      />
+
+        <img
+          src="./cross.svg"
+          alt="del"
+          onClick={() => {
+            deleteColumn(col?.id);
+          }}
+          className=" dark:bg-gray-300  absolute -right-2 -top-2 bg-gray-200 size-6 cursor-pointer dark:invert  rounded-full p-1 "
+        />
+
+
       <div
         ref={setNodeRef}
-        className="bg-blue-50 p-4 rounded min-w-72 w-96 flex-shrink-0  h-[36rem] overflow-y-scroll"
+        className="bg-blue-50 dark:bg-gray-600 p-4 rounded min-w-72 w-96 flex-shrink-0  h-[36rem] overflow-y-scroll"
       >
         <div className="font-bold mb-3 text-center">{col?.title}</div>
         <SortableContext
@@ -44,7 +47,7 @@ const TaskColumn = ({ colId }) => {
         {!newForm && (
           <div
             onClick={() => setNewFrom(true)}
-            className="flex justify-end mt-3 p-2 bg-gray-200 w-fit text-sm"
+            className="flex justify-end mt-3 p-2 dark:bg-gray-700 rounded-sm bg-gray-200 w-fit text-sm"
           >
             + Add New
           </div>
