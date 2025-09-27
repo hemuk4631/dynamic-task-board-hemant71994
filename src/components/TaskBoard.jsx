@@ -10,6 +10,7 @@ import {
 } from '@dnd-kit/core';
 const TaskBoard = () => {
   const { columnOrder, cols, dragTask } = useTaskBoard();
+  console.log(columnOrder);
   const sensor = useSensors(useSensor(PointerSensor));
   const onEndDrag = (e) => {
     if (!e.over) return;

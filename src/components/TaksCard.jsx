@@ -37,6 +37,7 @@ const TaksCard = ({ taskId, colId }) => {
             value={textAreaVal}
             onChange={(e) => settextAreaVal(e.target.value)}
             className="p-2 border rounded w-full outline-none text-sm"
+            // onBlur={saveEdit}
           />
         </div>
       ) : (

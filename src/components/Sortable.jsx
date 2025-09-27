@@ -13,6 +13,7 @@ const Sortable = ({ id, children }) => {
   const newListeners = {
     ...listeners,
     onPointerDown: (e) => {
+      console.log(e)
       const target = e.target;
       if (['INPUT', 'TEXTAREA', 'BUTTON', 'IMG'].includes(target.tagName)) {
         return;
