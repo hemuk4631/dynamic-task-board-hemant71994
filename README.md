@@ -28,17 +28,22 @@ npm run dev
         "columnOrder": ["col1", "col2", "col3"]
       }
     },
+    "presence": {
+    'usr-1': {
+    userId: 'usr-1',
+    online: true,
+    lastSeen: '2025-09-27T10:33:05.751Z'
+    },
+    'usr-2': {
+    userId: 'usr-2',
+    online: false,
+    lastSeen: '2025-10-27T10:33:05.751Z'
+    },
+    },
     "tasks": {
       "t1": { "id": "t1", "title": "tital1", "description": "description1", "createdAt": "2025-09-26T10:00:00Z", "updatedAt": "2025-09-26T10:00:00Z" },
-      "t2": { "id": "t2", "title": "tital2", "description": "description2", "createdAt": "2025-09-26T10:05:00Z", "updatedAt": "2025-09-26T10:05:00Z" },
-      "t3": { "id": "t3", "title": "tital3", "description": "description3", "createdAt": "2025-09-26T10:10:00Z", "updatedAt": "2025-09-26T10:10:00Z" },
-      "t4": { "id": "t4", "title": "tital4", "description": "description4", "createdAt": "2025-09-26T10:15:00Z", "updatedAt": "2025-09-26T10:15:00Z" }
+      "t2": { "id": "t2", "title": "tital2", "description": "description2", "createdAt": "2025-09-26T10:05:00Z", "updatedAt": "2025-09-26T10:05:00Z" }
     },
-    "users": {
-      "user1": { "id": "user1", "name": "Hemant", "online": true },
-      "user2": { "id": "user2", "name": "Vishal", "online": true },
-      "user3": { "id": "user3", "name": "Rajat", "online": false }
-    }
   }
 
   # <------ Tradeoffs or limitations----->
