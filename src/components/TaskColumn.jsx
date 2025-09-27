@@ -73,7 +73,7 @@ const TaskColumn = ({ colId }) => {
                   setDesc('');
                   setNewFrom(false);
                 }}
-                className="mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full"
+                className="text-white   w-full mt-2"
               >
                 Add
               </button>
@@ -83,7 +83,7 @@ const TaskColumn = ({ colId }) => {
                   setDesc('');
                   setTitle('');
                 }}
-                className="mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full"
+                className="  text-white   w-full mt-2"
               >
                 Cancel
               </button>
