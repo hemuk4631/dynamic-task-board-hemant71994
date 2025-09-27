@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TaskColumn from './TaskColumn';
 import { useTaskBoard } from '../context/TaskBoardProvider';
+import TaksCard from './TaksCard';
 import {
   closestCenter,
   useSensors,
   PointerSensor,
   useSensor,
   DndContext,
+  DragOverlay,
 } from '@dnd-kit/core';
 const TaskBoard = () => {
   const { columnOrder, cols, dragTask } = useTaskBoard();
   console.log(columnOrder);
   const sensor = useSensors(useSensor(PointerSensor));
+  const [activeid, setActiveId] = useState(null);
+
   const onEndDrag = (e) => {
     if (!e.over) return;
     if (e.active.id === e.over.id) return;
@@ -32,11 +36,17 @@ const TaskBoard = () => {
     }
     if (!toCol) return;
     dragTask(sourceCol, toCol, e.active.id, toIndex);
+    setActiveId(null);
   };
   return (
     <DndContext
       sensors={sensor}
       collisionDetection={closestCenter}
+      onDragStart={(e) => {
+        setActiveId(e.active.id);
+
+        console.log(activeid);
+      }}
       onDragEnd={onEndDrag}
     >
       <div className="flex gap-4  overflow-x-scroll p-4">
@@ -44,6 +54,9 @@ const TaskBoard = () => {
           <TaskColumn key={colId} colId={colId} />
         ))}
       </div>
+      <DragOverlay>
+        {activeid ? <TaksCard taskId={activeid} /> : null}
+      </DragOverlay>
     </DndContext>
   );
 };

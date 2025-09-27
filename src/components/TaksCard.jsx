@@ -53,7 +53,11 @@ const TaksCard = ({ taskId, colId }) => {
         <div className="flex  absolute right-0 -bottom-2 gap-1">
           <img onClick={enableEdit} src="./edit.svg" className="size-5" />
           <img
-            onClick={() => deleteTask(colId, taskId)}
+            onClick={() => {
+              if (colId) {
+                deleteTask(colId, taskId);
+              }
+            }}
             src="./delete.svg"
             className="size-5"
           />
