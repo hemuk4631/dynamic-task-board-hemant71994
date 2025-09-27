@@ -1,10 +1,14 @@
 # React + Vite
 
-## set up and run: 
--- first clone the repo: git clone https://github.com/hemuk4631/dynamic-task-board-hemant71994
--- go to project root: cd dynamic-task-board-hemant71994
--- install the packages: npm i
--- run the project: npm run dev
+##### set up and run 
+# first clone the repo
+git clone https://github.com/hemuk4631/dynamic-task-board-hemant71994
+# go to project root
+cd dynamic-task-board-hemant71994
+# install the packages
+npm i
+# run the project
+npm run dev
 
 ## <----- real-time architecture and data flow:----->
 -- I used firebase realtime database which store the task board structure like columns, tasks and taskIds and it reflects the changes instantly in realtime.
