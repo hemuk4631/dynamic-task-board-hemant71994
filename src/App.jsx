@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import TaskBoard from './components/TaskBoard';
-import { useTaskBoard } from './context/TaskBoardProvider';
+import { useTaskBoard } from '../src/context/TaskBoardProvider';
 function App() {
   const { addColumn, loading } = useTaskBoard();
   const [form, setForm] = useState(false);
