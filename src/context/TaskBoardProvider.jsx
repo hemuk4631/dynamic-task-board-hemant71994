@@ -1,6 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { db } from '../firebase';
-import { onValue, update, remove, ref } from 'firebase/database';
+import {
+  onValue,
+  update,
+  remove,
+  ref,
+  onDisconnect,
+  set,
+} from 'firebase/database';
 import { v4 as uuidv4 } from 'uuid';
 
 const TaskBoardContext = createContext();
@@ -8,9 +15,12 @@ export const useTaskBoard = () => useContext(TaskBoardContext);
 export const TaskBoardProvider = ({ children }) => {
   const [cols, setCols] = useState({});
   const [tasks, setTasks] = useState({});
-  const [loading, setLoading] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const [columnOrder, setColumnOrder] = useState([]);
+
+  const [liveUers, setLiveUsers] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     const board1Ref = ref(db, `boards/board1`);
@@ -80,7 +90,7 @@ export const TaskBoardProvider = ({ children }) => {
       updatedAt: new Date().toISOString(),
     };
     const taaskId = cols[colId]?.taskIds || [];
-    console.log(taaskId)
+    console.log(taaskId);
     const updates = {};
     updates[`tasks/${id}`] = task;
     updates[`boards/board1/columns/${colId}/taskIds`] = [...taaskId, id];
@@ -104,7 +114,38 @@ export const TaskBoardProvider = ({ children }) => {
     updates[`tasks/${taskId}`] = null;
     update(ref(db), updates);
   };
-
+  useEffect(() => {
+    const usrId = uuidv4();
+    const usrRef = ref(db, `presence/${usrId}`);
+    const connected = ref(db, '.info/connected');
+    const handlePresence = (snap) => {
+      if (snap?.val() === true) {
+        set(usrRef, {
+          userId: usrId,
+          online: true,
+          lastSeen: new Date().toISOString(),
+        });
+        onDisconnect(usrRef).remove();
+      }
+    };
+    onValue(connected, handlePresence);
+    return () => {
+      set(usrRef, {
+        userId: usrId,
+        online: false,
+        lastSeen: new Date().toISOString(),
+      });
+    };
+  }, []);
+  useEffect(() => {
+    const presence = ref(db, 'presence');
+    onValue(presence, (snap) => {
+      const val = snap?.val() || {};
+      const usrs = Object.values(val)?.filter((ele) => ele?.online);
+      setLiveUsers(usrs);
+    });
+  }, []);
+  
   return (
     <TaskBoardContext.Provider
       value={{
@@ -119,6 +160,7 @@ export const TaskBoardProvider = ({ children }) => {
         deleteTask,
         dragTask,
         loading,
+        liveUers
       }}
     >
       {children}
