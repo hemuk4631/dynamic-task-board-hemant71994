@@ -14,13 +14,13 @@ function App() {
   //   return <div className="text-black">loading....</div>;
   // }
   return (
-    <div className=" border border-blue-300 p-8 m-auto rounded-2xl w-7xl min-h-[40rem]">
+    <div className=" dark:bg-gray-700 dark:text-white border border-blue-300 p-8 m-auto rounded-2xl w-7xl min-h-[40rem]">
       <div>
         <div className="flex justify-between items-center px-4">
-          <div className="relative px-3 py-1 bg-green-300 rounded-md ">
+          <div className="relative px-3 py-1 dark:bg-gray-800 bg-green-300 rounded-md ">
             Online
             <div
-              className="absolute -top-2 -right-2 px-2 rounded-full bg-blue-200 cursor-pointer"
+              className="absolute -top-2 -right-2 px-2 rounded-full dark:bg-blue-700 bg-blue-200 cursor-pointer"
               onClick={() => setShow(true)}
             >
               {liveUers?.length || ''}
@@ -33,7 +33,7 @@ function App() {
                 <img
                   src="./cross.svg"
                   onClick={() => setShow(false)}
-                  className="size-6 absolute top-1 right-1"
+                  className=" absolute top-1 right-1 bg-gray-200 size-6 dark:bg-gray-300 cursor-pointer dark:invert  rounded-full p-1"
                 />
 
                 {liveUers?.length > 0 &&

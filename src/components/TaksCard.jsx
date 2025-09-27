@@ -19,7 +19,7 @@ const TaksCard = ({ taskId, colId }) => {
     setEditing(true);
   };
   return (
-    <div className="  rounded shadow relative bg-white p-3 h-full">
+    <div className="  rounded shadow relative bg-white dark:bg-gray-500 p-3 h-full">
       {editing ? (
         <div className=" flex-col flex gap-2 w-full">
           <input
@@ -41,17 +41,21 @@ const TaksCard = ({ taskId, colId }) => {
           />
         </div>
       ) : (
-        <div className="overflow-scroll">
-          <h2 onClick={enableEdit} className="font-semibold text-black">
+        <div className="overflow-scroll ">
+          <h2 onClick={enableEdit} className="font-semibold">
             {tasks[taskId]?.title}
           </h2>
-          <p className="text-sm">{tasks[taskId]?.description}</p>
+          <p className="text-sm text-start">{tasks[taskId]?.description}</p>
         </div>
       )}
 
       {!editing ? (
         <div className="flex  absolute right-0 -bottom-2 gap-1">
-          <img onClick={enableEdit} src="./edit.svg" className="size-5" />
+          <img
+            onClick={enableEdit}
+            src="./edit.svg"
+            className="size-6 cursor-pointer dark:invert bg-gray-300 rounded-full p-1 "
+          />
           <img
             onClick={() => {
               if (colId) {
@@ -59,17 +63,17 @@ const TaksCard = ({ taskId, colId }) => {
               }
             }}
             src="./delete.svg"
-            className="size-5"
+            className="size-6 cursor-pointer dark:invert bg-gray-300  rounded-full p-1"
           />
         </div>
       ) : (
         <img
           onClick={saveEdit}
           src="./approve.svg"
-          className="absolute right-0 -bottom-2 size-6 cursor-pointer"
+          className="absolute right-0 dark:bg-gray-300  rounded-full -bottom-2 size-6 cursor-pointer"
         />
       )}
-      <div className=" text-start flex gap-1 text-blue-500 text-[10px]">
+      <div className=" text-start flex gap-1 text-blue-500 dark:text-blue-300 text-[10px]">
         <div className="font-semibold">Last Updated:</div>
         <span>
           {moment(tasks[taskId]?.updatedAt || tasks[taskId]?.createdAt).format(
