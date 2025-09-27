@@ -25,6 +25,7 @@ const Sortable = ({ id, children }) => {
     transition,
     transform: CSS.Transform.toString(transform),
     cursor: 'grab',
+    opacity: isDragging ? 0 : 1,
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...newListeners}>
