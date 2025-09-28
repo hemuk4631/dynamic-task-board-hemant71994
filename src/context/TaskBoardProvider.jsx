@@ -34,8 +34,8 @@ export const TaskBoardProvider = ({ children }) => {
     });
     const taksRef = ref(db, 'tasks');
     onValue(taksRef, (snap) => setTasks(snap.val() || {}));
-    setLoading(false);
-  }, [update]);
+    // setLoading(false);
+  }, []);
   const addColumn = (title) => {
     const id = uuidv4();
     update(ref(db), {
@@ -54,8 +54,8 @@ export const TaskBoardProvider = ({ children }) => {
   };
 
   const dragTask = (fromColId, toColId, taskId, toInd) => {
-    const fromIds = Array.from(cols[fromColId]?.taskIds || []);
-    const toIds = Array.from(cols[toColId]?.taskIds || []);
+    const fromIds = Array.from(cols[fromColId]?.taskIds);
+    const toIds = Array.from(cols[toColId]?.taskIds);
     const filteredFrom = fromIds?.filter((id) => id !== taskId);
     if (fromColId === toColId) {
       filteredFrom?.splice(toInd, 0, taskId);
@@ -66,10 +66,10 @@ export const TaskBoardProvider = ({ children }) => {
     }
     const newTo = Array.from(toIds);
     if (!newTo?.includes(taskId)) {
-      newTo.splice(toInd, 0, taskId);
+      newTo?.splice(toInd, 0, taskId);
     } else {
       const tmp = newTo?.filter((id) => id !== taskId);
-      tmp.splice(toInd, 0, taskId);
+      tmp?.splice(toInd, 0, taskId);
       for (let i = 0; i < 1; i++) newTo?.pop();
       newTo.length = tmp.length;
       newTo?.splice(0, newTo?.length, ...tmp);
