@@ -70,7 +70,8 @@ const TaksCard = ({ taskId, colId }) => {
         <img
           onClick={saveEdit}
           src="./approve.svg"
-          className="absolute right-0 dark:bg-gray-300  rounded-full -bottom-2 size-6 cursor-pointer"
+          title="Update"
+          className="absolute right-0 dark:bg-gray-300 bg-gray-100 rounded-full -bottom-2 size-6 cursor-pointer"
         />
       )}
       <div className=" text-start flex gap-1 text-blue-500 dark:text-blue-300 text-[10px]">
