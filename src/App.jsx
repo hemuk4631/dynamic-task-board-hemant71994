@@ -47,7 +47,7 @@ function App() {
                       <div className=" text-sm bg-white p-4 rounded-md flex items-center gap-2 w-max">
                         <img src="./user.svg" alt="" className="size-8" />
                         <div className="">
-                          <div className="whitespace-nowrap flex gap-1">
+                          <div className="whitespace-nowrap text-black flex gap-1">
                             <h2 className="font-semibold">UserId: </h2>
                             {ele?.userId}
                           </div>
