@@ -34,7 +34,7 @@ export const TaskBoardProvider = ({ children }) => {
     });
     const taksRef = ref(db, 'tasks');
     onValue(taksRef, (snap) => setTasks(snap.val() || {}));
-    setLoading(false);
+    // setLoading(false);
   }, []);
   const addColumn = (title) => {
     const id = uuidv4();
