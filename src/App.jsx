@@ -8,10 +8,8 @@ function App() {
   const [form, setForm] = useState(false);
   const [title, setTitle] = useState('');
   const [show, setShow] = useState(false);
-
   console.log(liveUers);
   console.log(loading);
-
   return (
     <div className="relative dark:bg-gray-700 dark:text-white border border-blue-300 p-8 m-auto rounded-2xl w-7xl min-h-[40rem]">
       {loading ? (
@@ -40,7 +38,6 @@ function App() {
                     onClick={() => setShow(false)}
                     className=" absolute top-1 right-1 bg-gray-200 size-6 dark:bg-gray-300 cursor-pointer dark:invert  rounded-full p-1"
                   />
-
                   {liveUers?.length > 0 &&
                     show &&
                     liveUers?.map((ele) => (
@@ -61,7 +58,6 @@ function App() {
                 </div>
               )}
             </div>
-
             <button className="text-white" onClick={() => setForm(true)}>
               Add New column
             </button>
@@ -90,7 +86,6 @@ function App() {
                 onClick={() => {
                   setForm(false);
                   setTitle('');
-                  s;
                 }}
                 className="p-1 bg-gray-200 cursor-pointer   rounded-full dark:invert dark:size-7 size-6 dark:bg-gray-300"
               />
